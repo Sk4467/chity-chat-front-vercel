@@ -154,7 +154,7 @@ const FileUpload: React.FC = () => {
     formData.append('collection_name', collectionName);
 
     try {
-      const response = await axios.post('http://localhost:8000/process-file', formData);
+      const response = await axios.post('https://sk4467-fastapiapp.hf.space/process-file', formData);
       setUploadStatus(response.data.message);
     } catch (error: any) {
       setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
