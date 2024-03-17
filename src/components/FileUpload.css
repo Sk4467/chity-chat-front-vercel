@@ -43,7 +43,7 @@
   background-color: #007399;
 }
 
-.notification-popup {
+/* .notification-popup {
   position: fixed; /* Or absolute, depending on your layout */
   top: 10%; /* Adjust as needed */
   left: 50%;
@@ -55,7 +55,31 @@
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeInOut 3s forwards; /* Fade in and out */
+} */
+
+.notification-popup {
+  position: fixed; /* Keep it fixed over content */
+  top: 20%; /* Slightly lower to be centrally visible */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050; /* Higher than the loader */
+  background-color: #04AA6D; /* A pleasant green for success messages */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 3s forwards; /* Smooth fade in and out */
+  text-align: center;
+  width: 80%;
+  max-width: 400px; /* Limit maximum width */
+  font-size: 16px; /* Ensure text is easily readable */
 }
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; visibility: hidden; }
+  10%, 90% { opacity: 1; visibility: visible; }
+}
+
 
 @keyframes fadeInOut {
   0%, 100% { opacity: 0; visibility: hidden; }
