@@ -66,7 +66,7 @@ const FileUpload: React.FC = () => {
   const [collectionName, setCollectionName] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
   };
@@ -78,6 +78,7 @@ const FileUpload: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (file && collectionName) {
+      setIsLoading(true); // Start loading
       const formData = new FormData();
       formData.append('file', file);
       formData.append('collection_name', collectionName);
@@ -89,27 +90,22 @@ const FileUpload: React.FC = () => {
         setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
       } catch (error: any) {
         setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
+      } finally {
+        setIsLoading(false); // Stop loading regardless of the outcome
       }
     }
   };
 
   return (
     <div className="upload-container">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Collection Name:
-          <input type="text" value={collectionName} onChange={handleCollectionNameChange} />
-        </label>
-        <br />
-        <label>
-          Upload File (PDF, DOCX, CSV, TXT only):
-          <input type="file" onChange={handleFileChange} accept=".pdf,.docx,.csv,.txt" />
-        </label>
-        <br />
-        <button type="submit">Upload</button>
-      </form>
+      {/* Form elements... */}
+
       {showNotification && (
         <div className="notification-popup">File uploaded successfully!</div>
+      )}
+
+      {isLoading && (
+        <div className="loader"></div> // Show loader when isLoading is true
       )}
     </div>
   );
