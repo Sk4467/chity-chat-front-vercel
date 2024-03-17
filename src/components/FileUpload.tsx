@@ -66,7 +66,7 @@ const FileUpload: React.FC = () => {
   const [collectionName, setCollectionName] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
   };
