@@ -12,6 +12,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Conversational BOT</h1>
+        <p>Engage in delightful conversations powered by the latest AI technology.</p>
       </header>
       <div className="stars"></div>
       <div className="twinkling"></div>
