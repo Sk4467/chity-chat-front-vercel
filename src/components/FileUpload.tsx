@@ -57,6 +57,67 @@
 
 // export default FileUpload;
 // FileUpload.tsx
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import './FileUpload.css'; // Import CSS file
+
+// const FileUpload: React.FC = () => {
+//   const [file, setFile] = useState<File | null>(null);
+//   const [collectionName, setCollectionName] = useState<string>('');
+//   const [uploadStatus, setUploadStatus] = useState<string>('');
+//   const [showNotification, setShowNotification] = useState<boolean>(false);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     setFile(event.target.files ? event.target.files[0] : null);
+//   };
+
+//   const handleCollectionNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     setCollectionName(event.target.value);
+//   };
+
+//   const handleSubmit = async (event: React.FormEvent) => {
+//     event.preventDefault();
+//     if (file && collectionName) {
+//       const formData = new FormData();
+//       formData.append('file', file);
+//       formData.append('collection_name', collectionName);
+
+//       try {
+//         const response = await axios.post('http://localhost:8000/process-file', formData);
+//         setUploadStatus(response.data.message);
+//         setShowNotification(true);
+//         setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
+//       } catch (error: any) {
+//         setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="upload-container">
+//       <form onSubmit={handleSubmit}>
+//         <label>
+//           Collection Name:
+//           <input type="text" value={collectionName} onChange={handleCollectionNameChange} />
+//         </label>
+//         <br />
+//         <label>
+//           Upload File (PDF, DOCX, CSV, TXT only):
+//           <input type="file" onChange={handleFileChange} accept=".pdf,.docx,.csv,.txt" />
+//         </label>
+//         <br />
+//         <button type="submit">Upload</button>
+//       </form>
+//       {showNotification && (
+//         <div className="notification-popup">File uploaded successfully!</div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default FileUpload;
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import './FileUpload.css'; // Import CSS file
@@ -66,7 +127,8 @@ const FileUpload: React.FC = () => {
   const [collectionName, setCollectionName] = useState<string>('');
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Initially false
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFile(event.target.files ? event.target.files[0] : null);
   };
@@ -78,6 +140,7 @@ const FileUpload: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (file && collectionName) {
+      setIsLoading(true); // Start showing the loading indicator
       const formData = new FormData();
       formData.append('file', file);
       formData.append('collection_name', collectionName);
@@ -89,7 +152,11 @@ const FileUpload: React.FC = () => {
         setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
       } catch (error: any) {
         setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
+      } finally {
+        setIsLoading(false); // Stop showing the loading indicator
       }
+    } else {
+      setUploadStatus('Please select a file and enter a collection name.');
     }
   };
 
@@ -109,10 +176,14 @@ const FileUpload: React.FC = () => {
         <button type="submit">Upload</button>
       </form>
       {showNotification && (
-        <div className="notification-popup">File uploaded successfully!</div>
+        <div className="notification-popup">{uploadStatus}</div> // Show dynamic upload status
+      )}
+      {isLoading && (
+        <div className="loader"></div> // Show loader when isLoading is true
       )}
     </div>
   );
 };
 
 export default FileUpload;
+
