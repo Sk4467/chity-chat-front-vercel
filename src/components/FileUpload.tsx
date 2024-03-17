@@ -120,7 +120,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import './FileUpload.css'; // Import CSS file
+import './FileUpload.css'; // Ensure your CSS file path is correct
 
 const FileUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -139,24 +139,29 @@ const FileUpload: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (file && collectionName) {
-      setIsLoading(true); // Start showing the loading indicator
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('collection_name', collectionName);
-
-      try {
-        const response = await axios.post('http://localhost:8000/process-file', formData);
-        setUploadStatus(response.data.message);
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
-      } catch (error: any) {
-        setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
-      } finally {
-        setIsLoading(false); // Stop showing the loading indicator
-      }
-    } else {
+    if (!file || !collectionName) {
+      // Immediately inform the user if the file or collection name is missing
       setUploadStatus('Please select a file and enter a collection name.');
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
+      return; // Exit the function early
+    }
+
+    setIsLoading(true); // Start showing the loading indicator
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('collection_name', collectionName);
+
+    try {
+      const response = await axios.post('http://localhost:8000/process-file', formData);
+      setUploadStatus(response.data.message);
+    } catch (error: any) {
+      setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
+    } finally {
+      setIsLoading(false); // Stop showing the loading indicator
+      setShowNotification(true); // Show upload status notification
+      setTimeout(() => setShowNotification(false), 3000); // Automatically hide the notification after 3 seconds
     }
   };
 
@@ -173,17 +178,16 @@ const FileUpload: React.FC = () => {
           <input type="file" onChange={handleFileChange} accept=".pdf,.docx,.csv,.txt" />
         </label>
         <br />
-        <button type="submit">Upload</button>
+        <button type="submit" disabled={isLoading}>Upload</button> {/* Disable button during upload */}
       </form>
       {showNotification && (
-        <div className="notification-popup">{uploadStatus}</div> // Show dynamic upload status
+        <div className="notification-popup">{uploadStatus}</div>
       )}
       {isLoading && (
-        <div className="loader"></div> // Show loader when isLoading is true
+        <div className="loader"></div>
       )}
     </div>
   );
 };
 
 export default FileUpload;
-
