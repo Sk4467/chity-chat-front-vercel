@@ -43,19 +43,7 @@
   background-color: #007399;
 }
 
-/* .notification-popup {
-  position: fixed; /* Or absolute, depending on your layout */
-/*   top: 10%; /* Adjust as needed */
-/*   left: 50%;
-  transform: translateX(-50%);
-  z-index: 100; /* Ensure it's above all other content */
-/*   background-color: #04AA6D; /* A pleasant green for success messages */ */
-/*   color: white;
-  padding: 12px 24px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeInOut 3s forwards; /* Fade in and out */ */ */ */
-/* } */ */
+
 
 .notification-popup {
   position: fixed; /* Keep it fixed over content */
