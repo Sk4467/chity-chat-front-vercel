@@ -78,34 +78,38 @@ const FileUpload: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (file && collectionName) {
-      setIsLoading(true); // Start loading
       const formData = new FormData();
       formData.append('file', file);
       formData.append('collection_name', collectionName);
 
       try {
-        const response = await axios.post('https://sk4467-fastapiapp.hf.space/process-file', formData);
+        const response = await axios.post('http://localhost:8000/process-file', formData);
         setUploadStatus(response.data.message);
         setShowNotification(true);
         setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
       } catch (error: any) {
         setUploadStatus(error.response?.data?.detail || 'Failed to upload file.');
-      } finally {
-        setIsLoading(false); // Stop loading regardless of the outcome
       }
     }
   };
 
   return (
     <div className="upload-container">
-      {/* Form elements... */}
-
+      <form onSubmit={handleSubmit}>
+        <label>
+          Collection Name:
+          <input type="text" value={collectionName} onChange={handleCollectionNameChange} />
+        </label>
+        <br />
+        <label>
+          Upload File (PDF, DOCX, CSV, TXT only):
+          <input type="file" onChange={handleFileChange} accept=".pdf,.docx,.csv,.txt" />
+        </label>
+        <br />
+        <button type="submit">Upload</button>
+      </form>
       {showNotification && (
         <div className="notification-popup">File uploaded successfully!</div>
-      )}
-
-      {isLoading && (
-        <div className="loader"></div> // Show loader when isLoading is true
       )}
     </div>
   );
